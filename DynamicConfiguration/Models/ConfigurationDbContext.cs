@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace DynamicConfiguration.Data
+namespace DynamicConfiguration.Models
 {
 	public class ConfigurationDbContext : DbContext
 	{
