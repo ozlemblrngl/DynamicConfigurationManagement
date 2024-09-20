@@ -1,0 +1,6 @@
+@DynamicConfiguration_HostAddress = http://localhost:5213
+
+GET {{DynamicConfiguration_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
