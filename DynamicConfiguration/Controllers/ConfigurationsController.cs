@@ -30,7 +30,7 @@ namespace DynamicConfiguration.Controllers
 				Value = c.Value,
 				IsActive = c.IsActive,
 				ApplicationName = c.ApplicationName,
-				IsDeleted = c.IsDeleted
+
 			});
 
 			return Ok(result);
@@ -48,7 +48,7 @@ namespace DynamicConfiguration.Controllers
 				Value = c.Value,
 				IsActive = c.IsActive,
 				ApplicationName = c.ApplicationName,
-				IsDeleted = c.IsDeleted
+
 			});
 
 			var result = new Dictionary<string, object>();
@@ -98,7 +98,6 @@ namespace DynamicConfiguration.Controllers
 				Value = c.Value,
 				IsActive = c.IsActive,
 				ApplicationName = c.ApplicationName,
-				IsDeleted = c.IsDeleted
 			});
 
 			return Ok(result);
