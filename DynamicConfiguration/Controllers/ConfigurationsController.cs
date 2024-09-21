@@ -2,6 +2,7 @@
 using DynamicConfiguration.Models;
 using DynamicConfiguration.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 
 namespace DynamicConfiguration.Controllers
@@ -33,6 +34,55 @@ namespace DynamicConfiguration.Controllers
 			});
 
 			return Ok(result);
+		}
+		[HttpGet]
+		[Route("File/{applicationName}")]
+		public async Task<IActionResult> GetConfigurationFile(string applicationName)
+		{
+			var configs = await _configurationService.GetAllConfigurations();
+			var activeConfigs = configs.Select(c => new ConfigurationListDto
+			{
+				Id = c.Id,
+				Name = c.Name,
+				Type = c.Type,
+				Value = c.Value,
+				IsActive = c.IsActive,
+				ApplicationName = c.ApplicationName,
+				IsDeleted = c.IsDeleted
+			});
+
+			var result = new Dictionary<string, object>();
+
+			foreach (var config in activeConfigs)
+			{
+				// Value'yu Type'a göre doğru tipe dönüştür
+				object value;
+				switch (config.Type.ToLower())
+				{
+					case "int":
+						value = int.Parse(config.Value);
+						break;
+					case "bool":
+						value = bool.Parse(config.Value);
+						break;
+					case "double":
+						value = double.Parse(config.Value);
+						break;
+					case "string":
+					default:
+						value = config.Value;
+						break;
+				}
+
+				// Name, Type'a göre değeri ekle
+				result.Add(config.Name, value);
+			}
+
+			// JSON formatına dönüştür
+			string json = JsonConvert.SerializeObject(result, Newtonsoft.Json.Formatting.Indented);
+
+			// JSON olarak döndür
+			return Content(json, "application/json");
 		}
 
 
