@@ -1,6 +1,6 @@
 ﻿using DynamicConfiguration.Dtos;
 using DynamicConfiguration.Models;
-using DynamicConfiguration.Services;
+using DynamicConfiguration.Services.Concrete;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 

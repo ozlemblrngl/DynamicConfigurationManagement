@@ -1,13 +1,15 @@
 ﻿using DynamicConfiguration.Models;
+using DynamicConfiguration.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
 
-namespace DynamicConfiguration.Services
+namespace DynamicConfiguration.Services.Concrete
 {
-	public class ConfigurationService
+	public class ConfigurationService : IConfigurationService
 	{
 
 
 		private readonly ConfigurationDbContext _context;
+
 
 		public ConfigurationService(ConfigurationDbContext context)
 		{
@@ -17,7 +19,7 @@ namespace DynamicConfiguration.Services
 		public async Task<IEnumerable<Configuration>> GetConfigurations(string applicationName)
 		{
 			return await _context.Configurations
-				.Where(c => c.ApplicationName == applicationName && c.IsActive && !c.IsDeleted)
+				.Where(c => c.ApplicationName == applicationName && c.IsActive)
 				.ToListAsync();
 		}
 
@@ -26,6 +28,11 @@ namespace DynamicConfiguration.Services
 			return await _context.Configurations.FindAsync(id);
 		}
 
+		public async Task<Configuration?> GetConfigurationByName(string name, string applicationName)
+		{
+			return await _context.Configurations
+				.Where(c => c.ApplicationName == applicationName && c.Name == name && c.IsActive).FirstOrDefaultAsync();
+		}
 		public async Task AddConfiguration(Configuration config)
 		{
 			_context.Configurations.Add(config);
@@ -43,9 +50,9 @@ namespace DynamicConfiguration.Services
 			config.IsDeleted = true;
 			await _context.SaveChangesAsync();
 		}
-		public async Task<List<Configuration>> GetAllConfigurations()
+		public async Task<IEnumerable<Configuration>> GetAllConfigurations()
 		{
-			return await _context.Configurations.Where(c => c.IsActive && !c.IsDeleted).ToListAsync();
+			return await _context.Configurations.Where(c => c.IsActive).ToListAsync();
 		}
 
 	}

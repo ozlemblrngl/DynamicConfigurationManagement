@@ -1,5 +1,5 @@
 using DynamicConfiguration.Models;
-using DynamicConfiguration.Services;
+using DynamicConfiguration.Services.Concrete;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
