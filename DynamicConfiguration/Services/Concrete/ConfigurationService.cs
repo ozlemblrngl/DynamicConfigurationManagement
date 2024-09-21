@@ -40,12 +40,14 @@ namespace DynamicConfiguration.Services.Concrete
 				.Where(c => c.ApplicationName == applicationName && c.Name == name && c.IsActive)
 				.FirstOrDefaultAsync();
 		}
-		public async Task AddConfiguration(CreateConfigurationDto createConfigurationDto)
+		public async Task<ConfigurationDetailDto> AddConfiguration(CreateConfigurationDto createConfigurationDto)
 		{
 			var config = _mapper.Map<Configuration>(createConfigurationDto);
-
 			_context.Configurations.Add(config);
 			await _context.SaveChangesAsync();
+
+			var response = _mapper.Map<ConfigurationDetailDto>(config);
+			return response;
 		}
 
 
@@ -60,7 +62,7 @@ namespace DynamicConfiguration.Services.Concrete
 
 		public async Task DeleteConfiguration(int id)
 		{
-			var config = await _context.Configurations.Where(c => c.Id == id).FirstOrDefaultAsync();
+			var config = await _context.Configurations.FindAsync(id);
 			config.IsActive = false;
 			await _context.SaveChangesAsync();
 		}

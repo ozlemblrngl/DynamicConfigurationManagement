@@ -1,5 +1,4 @@
 ﻿using DynamicConfiguration.Dtos;
-using DynamicConfiguration.Models;
 using DynamicConfiguration.Services.Concrete;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -90,67 +89,36 @@ namespace DynamicConfiguration.Controllers
 		public async Task<IActionResult> GetConfigurations(string applicationName)
 		{
 			var configs = await _configurationService.GetConfigurations(applicationName);
-			var result = configs.Select(c => new ConfigurationListDto
-			{
-				Id = c.Id,
-				Name = c.Name,
-				Type = c.Type,
-				Value = c.Value,
-				IsActive = c.IsActive,
-				ApplicationName = c.ApplicationName,
-			});
-
-			return Ok(result);
+			return Ok(configs);
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> AddConfiguration([FromBody] CreateConfigurationDto dto)
+		public async Task<IActionResult> AddConfiguration([FromBody] CreateConfigurationDto createConfigurationdto)
 		{
 			if (ModelState.IsValid)
 			{
-				var config = new Configuration
-				{
-					Name = dto.Name,
-					Type = dto.Type,
-					Value = dto.Value,
-					IsActive = dto.IsActive,
-					ApplicationName = dto.ApplicationName
-				};
 
-				await _configurationService.AddConfiguration(config);
-				return Ok(config);
+				await _configurationService.AddConfiguration(createConfigurationdto);
+				return Ok(createConfigurationdto);
 			}
 
 			return BadRequest(ModelState);
 		}
 
-		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateConfiguration(int id, [FromBody] UpdateConfigurationDto dto)
+		[HttpPut]
+		public async Task<IActionResult> UpdateConfiguration([FromBody] UpdateConfigurationDto updateConfigurationDto)
 		{
-			var config = await _configurationService.GetConfigurationById(id);
-			if (config == null)
-				return NotFound();
 
-			config.Name = dto.Name;
-			config.Type = dto.Type;
-			config.Value = dto.Value;
-			config.IsActive = dto.IsActive;
-			config.ApplicationName = dto.ApplicationName;
+			await _configurationService.UpdateConfiguration(updateConfigurationDto);
 
-			await _configurationService.UpdateConfiguration(config);
-
-			return NoContent();
+			return Ok(updateConfigurationDto);
 		}
 
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteConfiguration(int id)
 		{
-			var config = await _configurationService.GetConfigurationById(id);
-			if (config == null)
-				return NotFound();
-
-			await _configurationService.DeleteConfiguration(config);
-			return NoContent();
+			await _configurationService.DeleteConfiguration(id);
+			return Ok();
 		}
 
 
