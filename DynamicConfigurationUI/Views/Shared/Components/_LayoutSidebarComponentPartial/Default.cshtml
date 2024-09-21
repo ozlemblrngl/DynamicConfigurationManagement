@@ -1,42 +1,24 @@
-﻿<div class="sidebar">
+﻿@model IEnumerable<ConfigurationListDto>
+
+<div class="sidebar">
 	<div class="scrollbar-inner sidebar-wrapper">
 		<ul class="nav">
 			<div class="user">
-				<div class="info">
-					<a href="Configuration/Index" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
+				<div class="info container-fluid d-flex justify-content-center">
+						<a class="" aria-expanded="true">
 						<span>
-							APPLICATIONS
-							<span class="caret"></span>
-						</span>
-					</a>
+							<b>APPLICATIONS</b>
+							</span>
+						</a>
 				</div>
 			</div>
-			<li class="nav-item">
-				<a href="index.html">
-					<i class="la la-dashboard"></i>
-					<p>Dashboard</p>
-					<span class="badge badge-count">5</span>
-				</a>
-			</li>
-			<li class="nav-item">
-				<a href="components.html">
-					<i class="la la-table"></i>
-					<p>Menüyü Görüntüle</p>
-					<span class="badge badge-count">14</span>
-				</a>
-			</li>
-			<li class="nav-item">
-				<a href="icons.html">
-					<i class="la la-fonticons"></i>
-					<p>Referanslar</p>
-				</a>
-			</li>
-			<li class="nav-item">
-				<a href="icons.html">
-					<i class="la la-fonticons"></i>
-					<p>Sosyal Medya</p>
-				</a>
-			</li>
-		</ul>
+
+				@foreach (var item in Model)
+				{
+				<li class="container-fluid d-flex justify-content-center">
+					@Html.ActionLink(item.ApplicationName, "GetByApplicationName", "Configuration", new { applicationName = item.ApplicationName }, null)
+				</li>
+				}
+		 </ul>
 	</div>
 </div>

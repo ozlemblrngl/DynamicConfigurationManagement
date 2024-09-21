@@ -1,0 +1,88 @@
+﻿@model CreateConfigurationDto
+<!DOCTYPE html>
+
+<div class="content">
+	<div class="container-fluid">
+		<h4 class="page-title">Add Configuration </h4>
+		<div class="row">
+			<div class="col-md-12">
+				<form method="post">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title"></div>
+						</div>
+						<div class="card-body">
+							<div class="form-group">
+								<label for="applicationName">Application Name</label>
+								<input type="text" class="form-control" asp-for="ApplicationName" id="applicationName">
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="form-group">
+								<label for="name">Name</label>
+								<input type="text" class="form-control" asp-for="Name" id="name">
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="card-body">
+								<div class="form-group">
+									<label for="type">Select Type</label>
+									<select class="form-select" id="type" asp-for="Type" onchange="handleTypeChange()">
+										<option value="int">Integer</option>
+										<option value="string">String</option>
+										<option value="bool">Boolean</option>
+										<option value="double">Double</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="card-body">
+								<div class="form-group">
+									<label for="value">Value</label>
+									
+									<input type="text" class="form-control" asp-for="Value" id="value" placeholder="Enter value">
+
+									<select class="form-select" id="boolSelect" style="display:none;">
+										<option value="true">True</option>
+										<option value="false">False</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="card-action">
+							<button class="btn btn-success">Add</button>
+						</div>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<script>
+	function handleTypeChange() {
+	  var selectedType = document.getElementById("type").value;
+	  var inputField = document.getElementById("value");
+	  var boolSelect = document.getElementById("boolSelect");
+
+	  inputField.style.display = "block";
+	  inputField.value = "";
+	  boolSelect.style.display = "none";
+
+	  if (selectedType === "int") {
+		inputField.type = "number"; 
+		inputField.placeholder = "Enter an integer";
+	  } else if (selectedType === "double") {
+		inputField.type = "number"; 
+		inputField.step = "any"; 
+		inputField.placeholder = "Enter a double";
+	  } else if (selectedType === "bool") {
+		inputField.style.display = "none"; 
+		boolSelect.style.display = "block"; 
+	  } else {
+		inputField.type = "text";
+		inputField.placeholder = "Enter a string";
+	  }
+	}
+</script>
