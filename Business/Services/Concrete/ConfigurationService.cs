@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
-using DynamicConfiguration.Dtos;
-using DynamicConfiguration.Models;
-using DynamicConfiguration.Services.Abstract;
+using Business.Dtos;
+using Business.Services.Abstract;
+using DataAccess.Context;
+using Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DynamicConfiguration.Services.Concrete
+namespace Business.Services.Concrete
 {
 	public class ConfigurationService : IConfigurationService
 	{

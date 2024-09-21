@@ -1,6 +1,6 @@
-﻿namespace DynamicConfiguration.Dtos
+﻿namespace Business.Dtos
 {
-	public class UpdateConfigurationDto
+	public class ConfigurationDetailDto
 	{
 		public int Id { get; set; }
 		public string Name { get; set; }

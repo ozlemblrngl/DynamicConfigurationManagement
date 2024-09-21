@@ -1,7 +1,7 @@
-﻿using DynamicConfiguration.Dtos;
-using DynamicConfiguration.Models;
+﻿using Business.Dtos;
+using Entities;
 
-namespace DynamicConfiguration.Services.Abstract
+namespace Business.Services.Abstract
 {
 	public interface IConfigurationService
 	{

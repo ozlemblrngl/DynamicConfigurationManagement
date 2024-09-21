@@ -1,5 +1,5 @@
-﻿using DynamicConfiguration.Dtos;
-using DynamicConfiguration.Services.Concrete;
+﻿using Business.Dtos;
+using Business.Services.Concrete;
 using Microsoft.AspNetCore.Mvc;
 
 

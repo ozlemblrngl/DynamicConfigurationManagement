@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace DynamicConfiguration.Migrations
+namespace DataAccess.Migrations
 {
     /// <inheritdoc />
     public partial class Initialize : Migration

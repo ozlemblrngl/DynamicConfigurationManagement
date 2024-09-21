@@ -1,6 +1,6 @@
-﻿using DynamicConfiguration.Services.Abstract;
+﻿using Business.Services.Abstract;
 
-namespace DynamicConfiguration.Services.Concrete
+namespace Business.Services.Concrete
 {
 	public class ConfigurationReader
 	{

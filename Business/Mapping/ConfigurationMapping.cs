@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
-using DynamicConfiguration.Dtos;
-using DynamicConfiguration.Models;
+using Business.Dtos;
+using Entities;
 
-namespace DynamicConfiguration.Mapping
+
+namespace Business.Mapping
 {
 	public class ConfigurationMapping : Profile
 	{
