@@ -109,7 +109,6 @@ namespace DynamicConfigurationUI.Controllers
 			var jsonData = JsonConvert.SerializeObject(updateConfigurationDto);
 			StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-			// PUT isteği ile güncelleme yapılır
 			var responseMessage = await client.PutAsync("https://localhost:7146/api/Configurations", stringContent);
 
 			if (responseMessage.IsSuccessStatusCode)

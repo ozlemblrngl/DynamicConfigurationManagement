@@ -7,6 +7,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<form method="post">
+					<input type="hidden" asp-for="IsActive" value="true" />
 					<div class="card">
 						<div class="card-header">
 							<div class="card-title"></div>
@@ -39,10 +40,10 @@
 							<div class="card-body">
 								<div class="form-group">
 									<label for="value">Value</label>
-									
+
 									<input type="text" class="form-control" asp-for="Value" id="value" placeholder="Enter value">
 
-									<select class="form-select" id="boolSelect" style="display:none;">
+									<select class="form-select" id="boolSelect" style="display:none;" onchange="setValueFromSelect()">
 										<option value="true">True</option>
 										<option value="false">False</option>
 									</select>
@@ -62,27 +63,40 @@
 
 <script>
 	function handleTypeChange() {
-	  var selectedType = document.getElementById("type").value;
-	  var inputField = document.getElementById("value");
-	  var boolSelect = document.getElementById("boolSelect");
+		var selectedType = document.getElementById("type").value;
+		var inputField = document.getElementById("value");
+		var boolSelect = document.getElementById("boolSelect");
 
-	  inputField.style.display = "block";
-	  inputField.value = "";
-	  boolSelect.style.display = "none";
+		boolSelect.style.display = "none";
+		inputField.style.display = "block";
 
-	  if (selectedType === "int") {
-		inputField.type = "number"; 
-		inputField.placeholder = "Enter an integer";
-	  } else if (selectedType === "double") {
-		inputField.type = "number"; 
-		inputField.step = "any"; 
-		inputField.placeholder = "Enter a double";
-	  } else if (selectedType === "bool") {
-		inputField.style.display = "none"; 
-		boolSelect.style.display = "block"; 
-	  } else {
-		inputField.type = "text";
-		inputField.placeholder = "Enter a string";
-	  }
+
+		if (selectedType === "int") {
+			inputField.type = "number";
+			inputField.placeholder = "Enter an integer";
+			inputField.value = "";
+		} else if (selectedType === "double") {
+			inputField.type = "number";
+			inputField.step = "any";
+			inputField.placeholder = "Enter a double";
+			inputField.value = "";
+		} else if (selectedType === "bool") {
+			inputField.style.display = "none";
+			boolSelect.style.display = "block";
+			boolSelect.value = "";
+		} else {
+			inputField.type = "text";
+			inputField.placeholder = "Enter a string";
+			inputField.value = "";
+		}
 	}
+
+	function setValueFromSelect() {
+		var boolSelect = document.getElementById("boolSelect");
+		var inputField = document.getElementById("value");
+
+
+		inputField.value = boolSelect.value;
+	}
+
 </script>
