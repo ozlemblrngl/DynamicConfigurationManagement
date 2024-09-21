@@ -73,6 +73,12 @@ namespace DynamicConfiguration.Controllers
 		//	return Content(json, "application/json");
 		//}
 
+		[HttpGet("Configuration/GetById/{id}")]
+		public async Task<IActionResult> GetConfigurationById(int id)
+		{
+			var configs = await _configurationService.GetConfigurationById(id);
+			return Ok(configs);
+		}
 
 		[HttpGet("{applicationName}")]
 		public async Task<IActionResult> GetConfigurations(string applicationName)

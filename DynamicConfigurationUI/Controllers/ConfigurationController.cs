@@ -85,5 +85,39 @@ namespace DynamicConfigurationUI.Controllers
 			}
 			return View();
 		}
+
+		[HttpGet("Configuration/UpdateConfiguration/{id}")]
+		public async Task<IActionResult> UpdateConfiguration(int id)
+		{
+			var client = _httpClientFactory.CreateClient();
+			var responseMessage = await client.GetAsync($"https://localhost:7146/api/Configurations/Configuration/GetById/{id}");
+
+			if (responseMessage.IsSuccessStatusCode)
+			{
+				var jsonData = await responseMessage.Content.ReadAsStringAsync();
+				var values = JsonConvert.DeserializeObject<UpdateConfigurationDto>(jsonData);
+				return View(values);
+			}
+
+			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> UpdateConfiguration(UpdateConfigurationDto updateConfigurationDto)
+		{
+			var client = _httpClientFactory.CreateClient();
+			var jsonData = JsonConvert.SerializeObject(updateConfigurationDto);
+			StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+			// PUT isteği ile güncelleme yapılır
+			var responseMessage = await client.PutAsync("https://localhost:7146/api/Configurations", stringContent);
+
+			if (responseMessage.IsSuccessStatusCode)
+			{
+				return RedirectToAction("Index");
+			}
+
+			return View(updateConfigurationDto);
+		}
 	}
 }
