@@ -1,122 +1,130 @@
 ﻿using DynamicConfigurationUI.Models.Configuration;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System.Text;
 
 namespace DynamicConfigurationUI.Controllers
 {
-    public class ConfigurationController : Controller
-    {
-        private readonly IHttpClientFactory _httpClientFactory;
+	public class ConfigurationController : Controller
+	{
+		private readonly IHttpClientFactory _httpClientFactory;
+		private readonly IMemoryCache _cache;
 
-        public ConfigurationController(IHttpClientFactory httpClientFactory)
-        {
-            _httpClientFactory = httpClientFactory;
-        }
 
-        public async Task<IActionResult> Index()
-        {
-            var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7146/api/Configurations");
+		public ConfigurationController(IHttpClientFactory httpClientFactory, IMemoryCache cache)
+		{
+			_httpClientFactory = httpClientFactory;
+			_cache = cache;
+		}
 
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<IEnumerable<ConfigurationListDto>>(jsonData);
+		public async Task<IActionResult> Index()
+		{
+			var client = _httpClientFactory.CreateClient();
+			var responseMessage = await client.GetAsync("https://localhost:7146/api/Configurations");
 
-                if (values != null)
-                {
-                    return View(values);
-                }
-            }
+			if (responseMessage.IsSuccessStatusCode)
+			{
+				var jsonData = await responseMessage.Content.ReadAsStringAsync();
+				var values = JsonConvert.DeserializeObject<IEnumerable<ConfigurationListDto>>(jsonData);
 
-            return View();
-        }
+				if (values != null)
+				{
+					ViewBag.ApplicationList = values.Select(x => x.ApplicationName).Distinct().ToList();
+					return View(values);
+				}
+			}
 
-        public async Task<IActionResult> GetByApplicationName(string applicationName)
-        {
-            var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.GetAsync($"https://localhost:7146/api/Configurations/{applicationName}");
+			return View();
+		}
 
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<IEnumerable<ConfigurationListDto>>(jsonData);
+		public async Task<IActionResult> GetByApplicationName(string applicationName)
+		{
+			var client = _httpClientFactory.CreateClient();
+			var responseMessage = await client.GetAsync($"https://localhost:7146/api/Configurations/{applicationName}");
 
-                if (values != null)
-                {
-                    return View("Index", values);
-                }
-            }
+			if (responseMessage.IsSuccessStatusCode)
+			{
+				var jsonData = await responseMessage.Content.ReadAsStringAsync();
+				var values = JsonConvert.DeserializeObject<IEnumerable<ConfigurationListDto>>(jsonData);
 
-            return View();
-        }
+				if (values != null)
+				{
+					return View("Index", values);
+				}
+			}
 
-        [HttpGet]
-        public IActionResult AddConfiguration()
-        {
-            return View();
-        }
+			return View();
+		}
 
-        [HttpPost]
+		[HttpGet]
+		public IActionResult AddConfiguration()
+		{
+			return View();
+		}
 
-        public async Task<IActionResult> AddConfiguration(CreateConfigurationDto createConfigurationDto)
-        {
+		[HttpPost]
 
-            var client = _httpClientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(createConfigurationDto);
-            StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PostAsync("https://localhost:7146/api/Configurations", stringContent);
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index");
-            }
-            return View();
+		public async Task<IActionResult> AddConfiguration(CreateConfigurationDto createConfigurationDto)
+		{
 
-        }
+			var client = _httpClientFactory.CreateClient();
+			var jsonData = JsonConvert.SerializeObject(createConfigurationDto);
+			StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+			var responseMessage = await client.PostAsync("https://localhost:7146/api/Configurations", stringContent);
+			if (responseMessage.IsSuccessStatusCode)
+			{
+				_cache.Remove("applicationListCache");
+				return RedirectToAction("Index");
+			}
+			return View();
 
-        public async Task<IActionResult> DeleteConfiguration(int id)
-        {
-            var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.DeleteAsync($"https://localhost:7146/api/Configurations/{id}");
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index");
-            }
-            return View();
-        }
+		}
 
-        [HttpGet("Configuration/UpdateConfiguration/{id}")]
-        public async Task<IActionResult> UpdateConfiguration(int id)
-        {
-            var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.GetAsync($"https://localhost:7146/api/Configurations/Configuration/GetById/{id}");
+		public async Task<IActionResult> DeleteConfiguration(int id)
+		{
+			var client = _httpClientFactory.CreateClient();
+			var responseMessage = await client.DeleteAsync($"https://localhost:7146/api/Configurations/{id}");
+			if (responseMessage.IsSuccessStatusCode)
+			{
+				_cache.Remove("applicationListCache");
+				return RedirectToAction("Index");
+			}
+			return View();
+		}
 
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<UpdateConfigurationDto>(jsonData);
-                return View(values);
-            }
+		[HttpGet("Configuration/UpdateConfiguration/{id}")]
+		public async Task<IActionResult> UpdateConfiguration(int id)
+		{
+			var client = _httpClientFactory.CreateClient();
+			var responseMessage = await client.GetAsync($"https://localhost:7146/api/Configurations/Configuration/GetById/{id}");
 
-            return View();
-        }
+			if (responseMessage.IsSuccessStatusCode)
+			{
+				var jsonData = await responseMessage.Content.ReadAsStringAsync();
+				var values = JsonConvert.DeserializeObject<UpdateConfigurationDto>(jsonData);
+				return View(values);
+			}
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateConfiguration(UpdateConfigurationDto updateConfigurationDto)
-        {
-            var client = _httpClientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(updateConfigurationDto);
-            StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+			return View();
+		}
 
-            var responseMessage = await client.PutAsync("https://localhost:7146/api/Configurations", stringContent);
+		[HttpPost]
+		public async Task<IActionResult> UpdateConfiguration(UpdateConfigurationDto updateConfigurationDto)
+		{
+			var client = _httpClientFactory.CreateClient();
+			var jsonData = JsonConvert.SerializeObject(updateConfigurationDto);
+			StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index");
-            }
+			var responseMessage = await client.PutAsync("https://localhost:7146/api/Configurations", stringContent);
 
-            return View(updateConfigurationDto);
-        }
-    }
+			if (responseMessage.IsSuccessStatusCode)
+			{
+				_cache.Remove("applicationListCache");
+				return RedirectToAction("Index");
+			}
+
+			return View(updateConfigurationDto);
+		}
+	}
 }

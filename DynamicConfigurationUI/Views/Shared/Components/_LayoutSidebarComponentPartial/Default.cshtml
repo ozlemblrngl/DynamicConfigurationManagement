@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ConfigurationListDto>
+﻿@model List<string>
 
 <div class="sidebar">
 	<div class="scrollbar-inner sidebar-wrapper">
@@ -13,10 +13,10 @@
 				</div>
 			</div>
 
-				@foreach (var item in Model)
+			@foreach (var applicationName in Model)
 				{
 				<li class="container-fluid d-flex justify-content-center">
-					@Html.ActionLink(item.ApplicationName, "GetByApplicationName", "Configuration", new { applicationName = item.ApplicationName }, null)
+					@Html.ActionLink(applicationName, "GetByApplicationName", "Configuration", new { applicationName = applicationName }, null)
 				</li>
 				}
 		 </ul>
