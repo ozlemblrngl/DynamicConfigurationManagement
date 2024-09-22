@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicConfiguration", "DynamicConfiguration\DynamicConfiguration.csproj", "{6DF29B3A-8770-43C3-B7B9-85EBE58DB7CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicConfigurationWebApi", "DynamicConfiguration\DynamicConfigurationWebApi.csproj", "{6DF29B3A-8770-43C3-B7B9-85EBE58DB7CF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicConfigurationUI", "DynamicConfigurationUI\DynamicConfigurationUI.csproj", "{C1AFBF87-7A9A-4153-854B-9929DC99D5F9}"
 EndProject
