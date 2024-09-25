@@ -12,7 +12,7 @@ Asp.Net Core MVC ve Web API ile geliştirilmiş olan sistem, esnek bir kullanıc
 - **Modern Teknolojiler**: Proje, .NET 8 üzerinde inşa edilmiştir.
 -  Kayıtların client-side olarak ismi ile filtrelenebilmesi.
 - Kullanıcı dostu bir arayüz.
-- Clean Code, Don't Repeat Yourself, Solid Prensipleri dkkate alınarak yazılmıştır.
+- Clean Code, Don't Repeat Yourself, Solid Prensipleri dikkate alınarak yazılmıştır.
 
 ## Kullanılan Teknolojiler
 - **.NET 8**
