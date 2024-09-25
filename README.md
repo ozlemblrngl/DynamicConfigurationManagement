@@ -24,6 +24,3 @@ Asp.Net Core MVC ve Web API ile geliştirilmiş olan sistem, esnek bir kullanıc
 - **Newtonsoft.Json**
 
 
-## Tasarım Deseni
-Proje, **Repository** tasarım desenini kullanarak veri erişim katmanını soyutlar. Bu yapı, test edilebilirliği artırır ve kodun bakımını kolaylaştırır.
-
