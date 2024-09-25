@@ -68,5 +68,27 @@ namespace DynamicConfigurationCore.Services.Concrete
 
 			throw new KeyNotFoundException($"Key '{key}' not found in configuration.");
 		}
+		public object GetValue(string key)
+		{
+			var configItem = _configurations[key];
+			if (configItem.Type == "int" && int.TryParse(configItem.Value, out var intValue))
+			{
+				return intValue;
+			}
+
+			if (configItem.Type == "bool" && bool.TryParse(configItem.Value, out var boolValue))
+			{
+				return boolValue;
+			}
+
+			if (configItem.Type == "double" && double.TryParse(configItem.Value, out var doubleValue))
+			{
+				return doubleValue;
+			}
+
+			return configItem.Value;
+
+			throw new KeyNotFoundException($"Key '{key}' not found in configuration.");
+		}
 	}
 }
